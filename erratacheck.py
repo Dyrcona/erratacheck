@@ -21,7 +21,7 @@ class MyHTMLParser (HTMLParser):
         self.have_strong = False
         self.have_italics = False
         self.have_break = False
-        self.sequence = None
+        self.sequence = 0
         self.what = None
         self.when = None
         self.arch = None
