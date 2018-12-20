@@ -1,13 +1,10 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3.7
 
 # Download the OpenBSD Errata and report if there are new errata.
 
-# Written in Python 2.7 because I don't want to also install Python 3
-# on styx or mail just for this.
-
-from ConfigParser import ConfigParser
-from HTMLParser import HTMLParser
-import datetime, os.path, re, time, urllib2
+from configparser import ConfigParser
+from html.parser import HTMLParser
+import datetime, os.path, re, time, urllib.request, urllib.error
 
 # Globals:
 # The last id in the patch sequence for this release.
@@ -68,8 +65,8 @@ class MyHTMLParser (HTMLParser):
         sequence = int(self.sequence)
 
     def report(self):
-        print self.sequence + ": " + self.what + ": " + self.when + ": " + self.arch
-        print re.sub('\n+', '\n', self.description)
+        print(self.sequence + ": " + self.what + ": " + self.when + ": " + self.arch)
+        print(re.sub('\n+', '\n', self.description))
 
 ### End of MyHTMLParser ###
 
@@ -79,22 +76,22 @@ if __name__ == '__main__':
     config = ConfigParser()
     config.read(config_path)
     # Get the last sequence value.
-    sequence = config.getint('Errata', 'sequence')
+    sequence = config['Errata'].getint('sequence')
     # Get a datetime object for the If-Modified-Since header
-    since_when = datetime.datetime.utcfromtimestamp(config.getfloat('Errata', 'unixstamp'))
+    since_when = datetime.datetime.utcfromtimestamp(config['Errata'].getfloat('unixstamp'))
     headers = {
         'If-Modified-Since': since_when.strftime("%A, %d-%b-%y %H:%M:%S GMT") 
     }
     try:
-        request = urllib2.Request(config.get('Errata', 'URL'), headers=headers)
-        u = urllib2.urlopen(request)
+        request = urllib.request.Request(config['Errata']['URL'], headers=headers)
+        u = urllib.request.urlopen(request)
         parser = MyHTMLParser(sequence)
-        parser.feed(u.read())
+        parser.feed(u.read().decode('latin_1'))
         parser.close()
         # Update the configuration file.
-        config.set('Errata', 'unixstamp', time.time())
-        config.set('Errata', 'sequence', sequence)
+        config['Errata']['unixstamp'] = str(time.time())
+        config['Errata']['sequence'] = str(sequence)
         with open(config_path, 'w') as f:
             config.write(f)
-    except urllib2.HTTPError as e:
-        print "{0} {1}".format(e.code(), e.reason())
+    except urllib.error.HTTPError as e:
+        print("{0} {1}".format(e.code(), e.reason()))
