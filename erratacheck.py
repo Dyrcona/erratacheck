@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 # ---------------------------------------------------------------
 # erratacheck.py: Check for new OpenBSD errata
 # Copyright (c) 2018 Jason J.A. Stephenson <jason@sigio.com>

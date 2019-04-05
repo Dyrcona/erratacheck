@@ -14,10 +14,6 @@ modern operating systems come with Python 3, either as part of the
 default install or a separate package.  See your operating system
 instructions for how to install it.
 
-**NOTE:** The `erratacheck` program itself specifies Python 3.7
-(`python3.7`).  You can change that to `python3` and it should still
-work.
-
 ## Installation
 
 Installation of `erratacheck` is very simple.  Copy `erratacheck.py`
