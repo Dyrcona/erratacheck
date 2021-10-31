@@ -94,7 +94,7 @@ if __name__ == '__main__':
     # Get a datetime object for the If-Modified-Since header
     since_when = datetime.datetime.utcfromtimestamp(config['Errata'].getfloat('unixstamp'))
     headers = {
-        'If-Modified-Since': since_when.strftime("%A, %d-%b-%y %H:%M:%S GMT") 
+        'If-Modified-Since': since_when.strftime("%A, %d-%b-%y %H:%M:%S GMT")
     }
     try:
         request = urllib.request.Request(config['Errata']['URL'], headers=headers)
